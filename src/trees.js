@@ -11,10 +11,6 @@ class Tree {
     this.root = new Node(rootValue);
   }
 
-  insertLeft(newValue) {
-    this.leftChild = new Node(newValue);
-  }
-
   postOrderPrint(currentNode) {
     if (currentNode !== null) {
       this.postOrderPrint(currentNode.leftChild);

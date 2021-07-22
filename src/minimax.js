@@ -2,8 +2,9 @@
 // working of Alpha-Beta Pruning
 
 // Initial values of
-// Aplha and Beta
+//
 let MAX = 1000;
+//
 let MIN = -1000;
 
 // Returns optimal value for
@@ -30,6 +31,7 @@ function minimax(depth, nodeIndex, maximizingPlayer, values, alpha, beta) {
       );
       best = Math.max(best, val);
       alpha = Math.max(alpha, best);
+      console.log(alpha);
 
       // Alpha Beta Pruning
       if (beta <= alpha) break;
@@ -51,6 +53,7 @@ function minimax(depth, nodeIndex, maximizingPlayer, values, alpha, beta) {
       );
       best = Math.min(best, val);
       beta = Math.min(beta, best);
+      console.log(beta);
 
       // Alpha Beta Pruning
       if (beta <= alpha) break;
@@ -60,7 +63,7 @@ function minimax(depth, nodeIndex, maximizingPlayer, values, alpha, beta) {
 }
 
 // Driver Code
-//let values = [3, 5, 6, 9, 1, 2, 0, -1];
-let values = [3, 12, 8, 2, 4, 6, 14, 5, 2];
+let values = [3, 5, 6, 9, 1, 2, 0, -1];
+//let values = [3, 12, 8, 2, 4, 6, 14, 5, 2];
 
 console.log('The optimal value is : ' + minimax(0, 0, true, values, MIN, MAX));
