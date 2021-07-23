@@ -11,3 +11,8 @@
 // this algorithm is in post tree order depth first search
 //Really nice practice app link:
 //https://minmax-alpha-beta.herokuapp.com/
+//one of the better tutorials that really helped me understand what was
+//actually happening with alpha and beta instead of just the gist
+//https://www.javatpoint.com/ai-alpha-beta-pruning
+//remember depth starts at the root node at 0 and
+//hieght starts at the leaf nodes and starts at 0
