@@ -2,6 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
+let scores = {
+  null: null,
+  O: -1,
+  X: 1,
+};
+
 function Square(props) {
   return (
     <button className="square" onClick={() => props.onClick()}>
@@ -20,18 +26,54 @@ class Board extends React.Component {
   }
 
   AIplayerRandom(board) {
+    if (!board.includes(null)) {
+      return;
+    }
     let move = Math.floor(Math.random() * 9);
-    if (board[move] === null && board.includes(null)) {
-      this.xIsNext = !this.xIsNext;
+    if (board[move] === null) {
+      // this.setState({
+      //   xIsNext: !this.state.xIsNext,
+      // });
+      //this.state.xIsNext = !this.state.xIsNext;
       return move;
     } else {
       return this.AIplayerRandom(board);
     }
   }
 
-  AIminimax(board) {
-    let clone = [...board];
-    console.log(clone);
+  AIminimax(board, depth, isMaximising) {
+    //let clone = [...board];
+    let result = scores[calculateWinner(board)];
+    console.log(result);
+    console.log(board);
+
+    if (result) {
+      return result;
+    }
+
+    if (isMaximising) {
+      let max = -Infinity;
+      if (board.includes(null)) {
+        let amove = this.AIplayerRandom(board);
+        board[amove] = this.state.xIsNext ? 'X' : 'O';
+        let score = this.AIminimax(board, depth + 1, false);
+        if (score > max) {
+          max = score;
+        }
+      }
+      return max;
+    } else {
+      let min = Infinity;
+      if (board.includes(null)) {
+        let amove = this.AIplayerRandom(board);
+        board[amove] = this.state.xIsNext ? 'X' : 'O';
+        let score = this.AIminimax(board, depth + 1, true);
+        if (score < min) {
+          min = score;
+        }
+      }
+      return min;
+    }
   }
 
   handleClick(i) {
@@ -40,17 +82,21 @@ class Board extends React.Component {
     if (calculateWinner(squares) || squares[i]) {
       return;
     }
-    squares[i] = this.state.xIsNext ? 'X' : 'O';
-    this.xIsNext = !this.xIsNext;
-    //squares[i] = 'X';
-    let move = this.AIplayerRandom(squares);
-    //squares[move] = 'O';
-    squares[move] = !this.state.xIsNext ? 'X' : 'O';
-    this.setState({
-      squares: squares,
-      //xIsNext: !this.state.xIsNext,
-    });
-    this.AIminimax(squares);
+    if (this.state.xIsNext) {
+      squares[i] = this.state.xIsNext ? 'X' : 'O';
+      //this.state.xIsNext = !this.state.xIsNext;
+      //this.xIsNext = !this.xIsNext;
+
+      this.setState({
+        squares: squares,
+        xIsNext: !this.state.xIsNext,
+      });
+      let move = this.AIplayerRandom(squares);
+      squares[move] = !this.state.xIsNext ? 'X' : 'O';
+    }
+
+    //let notyetamove = this.AIminimax(squares, 3, true);
+    //console.log(notyetamove);
   }
 
   renderSquare(i) {
@@ -132,15 +178,4 @@ function calculateWinner(squares) {
     }
   }
   return null;
-}
-
-function calculateScore(squares) {
-  let winner = calculateWinner(squares);
-  if (winner === 'X') {
-    return 1;
-  } else if (winner === 'O') {
-    return -1;
-  } else {
-    return 0;
-  }
 }
