@@ -19,18 +19,38 @@ class Board extends React.Component {
     };
   }
 
+  AIplayerRandom(board) {
+    let move = Math.floor(Math.random() * 9);
+    if (board[move] === null && board.includes(null)) {
+      this.xIsNext = !this.xIsNext;
+      return move;
+    } else {
+      return this.AIplayerRandom(board);
+    }
+  }
+
+  AIminimax(board) {
+    let clone = [...board];
+    console.log(clone);
+  }
+
   handleClick(i) {
     const squares = this.state.squares.slice();
     //disable click for won game or already clicked.
-    //Would like to add if next player turn disable too
     if (calculateWinner(squares) || squares[i]) {
       return;
     }
     squares[i] = this.state.xIsNext ? 'X' : 'O';
+    this.xIsNext = !this.xIsNext;
+    //squares[i] = 'X';
+    let move = this.AIplayerRandom(squares);
+    //squares[move] = 'O';
+    squares[move] = !this.state.xIsNext ? 'X' : 'O';
     this.setState({
       squares: squares,
-      xIsNext: !this.state.xIsNext,
+      //xIsNext: !this.state.xIsNext,
     });
+    this.AIminimax(squares);
   }
 
   renderSquare(i) {
@@ -112,4 +132,15 @@ function calculateWinner(squares) {
     }
   }
   return null;
+}
+
+function calculateScore(squares) {
+  let winner = calculateWinner(squares);
+  if (winner === 'X') {
+    return 1;
+  } else if (winner === 'O') {
+    return -1;
+  } else {
+    return 0;
+  }
 }
