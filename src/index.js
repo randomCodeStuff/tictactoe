@@ -3,10 +3,19 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 let scores = {
-  null: null,
-  O: -1,
-  X: 1,
+  null: 0,
+  O: -10,
+  X: 10,
 };
+
+function getEmptyCell(squares) {
+  for (let i = 0; i < 9; i++) {
+    if (squares[i] === null) {
+      return i;
+    }
+  }
+  return null; //no empty squares left on board
+}
 
 function Square(props) {
   return (
@@ -41,38 +50,61 @@ class Board extends React.Component {
     }
   }
 
-  AIminimax(board, depth, isMaximising) {
-    //let clone = [...board];
-    let result = scores[calculateWinner(board)];
-    console.log(result);
-    console.log(board);
+  bestAIMove(squares) {
+    let bestScore = -1000;
+    //let score;
+    let move;
+    for (let i = 0; i < 9; i++) {
+      if (squares[i] === null) {
+        squares[i] = 'O';
+        let score = this.minimax(squares, true);
+        console.log('score in bestAImove: ' + score);
+        squares[i] = null;
+        if (score > bestScore) {
+          bestScore = score;
+          move = i;
+        }
+      }
+    }
+    console.log(move);
+    return move;
+  }
 
-    if (result) {
-      return result;
+  minimax(board, isMaximizing) {
+    let result = calculateWinner(board);
+    let checkIfTie = board.filter((word) => word === null).length;
+    if (result || checkIfTie === 1) {
+      return scores[result];
     }
 
-    if (isMaximising) {
-      let max = -Infinity;
-      if (board.includes(null)) {
-        let amove = this.AIplayerRandom(board);
-        board[amove] = this.state.xIsNext ? 'X' : 'O';
-        let score = this.AIminimax(board, depth + 1, false);
-        if (score > max) {
-          max = score;
+    if (isMaximizing) {
+      let bestScore = -1000;
+      for (let i = 0; i < 9; i++) {
+        if (board[i] === null) {
+          board[i] = 'O';
+          let score = this.minimax(board, false);
+          board[i] = null;
+          // if (score > bestScore) {
+          //   bestScore = score;
+          // }
+          bestScore = Math.max(score, bestScore);
         }
       }
-      return max;
+      return bestScore;
     } else {
-      let min = Infinity;
-      if (board.includes(null)) {
-        let amove = this.AIplayerRandom(board);
-        board[amove] = this.state.xIsNext ? 'X' : 'O';
-        let score = this.AIminimax(board, depth + 1, true);
-        if (score < min) {
-          min = score;
+      let bestScore = 1000;
+      for (let i = 0; i++; i < 9) {
+        if (board[i] === null) {
+          board[i] = 'X';
+          let score = this.minimax(board, true);
+          board[i] = null;
+          // if (score < bestScore) {
+          //   bestScore = score;
+          // }
+          bestScore = Math.min(score, bestScore);
         }
       }
-      return min;
+      return bestScore;
     }
   }
 
@@ -84,15 +116,20 @@ class Board extends React.Component {
     }
     if (this.state.xIsNext) {
       squares[i] = this.state.xIsNext ? 'X' : 'O';
-      //this.state.xIsNext = !this.state.xIsNext;
-      //this.xIsNext = !this.xIsNext;
-
+      // this.setState({
+      //   squares: squares,
+      // });
+      this.state.xIsNext = !this.state.xIsNext;
+      //let move = this.AIplayerRandom(squares);
+      //squares[move] = !this.state.xIsNext ? 'X' : 'O';
+      //let score = this.minimax(squares, 0, false, 0, 0);
+      //console.log(score);
+      let move = this.bestAIMove(squares);
+      squares[move] = !this.state.xIsNext ? 'O' : 'X';
+      this.state.xIsNext = !this.state.xIsNext;
       this.setState({
         squares: squares,
-        xIsNext: !this.state.xIsNext,
       });
-      let move = this.AIplayerRandom(squares);
-      squares[move] = !this.state.xIsNext ? 'X' : 'O';
     }
 
     //let notyetamove = this.AIminimax(squares, 3, true);
