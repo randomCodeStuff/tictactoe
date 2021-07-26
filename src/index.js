@@ -4,8 +4,8 @@ import './index.css';
 
 let scores = {
   T: 0,
-  O: -10,
-  X: 10,
+  O: 10,
+  X: -10,
 };
 
 function Square(props) {
@@ -167,13 +167,13 @@ function minimax(board, isMaximizing, depth) {
     let bestScore = -Infinity;
     for (let i = 0; i < 9; i++) {
       if (board[i] == null) {
-        board[i] = 'x';
+        board[i] = 'O';
         let score = minimax(board, false, depth + 1);
         board[i] = null;
-        //bestScore = Math.max(score, bestScore);
-        if (score > bestScore) {
-          bestScore = score;
-        }
+        bestScore = Math.max(score, bestScore);
+        // if (score > bestScore) {
+        //   bestScore = score;
+        // }
       }
     }
     return bestScore;
@@ -184,7 +184,7 @@ function minimax(board, isMaximizing, depth) {
     for (let i = 0; i < 9; i++) {
       if (board[i] == null) {
         //console.log(i);
-        board[i] = 'O';
+        board[i] = 'X';
         //console.log(board);
         let score = minimax(board, true, depth + 1);
         board[i] = null;
@@ -199,8 +199,8 @@ function minimax(board, isMaximizing, depth) {
 }
 
 function bestAIMove(squares) {
-  console.log(squares);
-  let bestScore = Infinity;
+  //console.log(squares);
+  let bestScore = -Infinity;
 
   let move;
   for (let i = 0; i < 9; i++) {
@@ -210,7 +210,7 @@ function bestAIMove(squares) {
       let score = minimax(squares, false, 0);
       console.log('score in bestAImove: ' + score + 'for move ' + i);
       squares[i] = null;
-      if (score < bestScore) {
+      if (score > bestScore) {
         bestScore = score;
         move = i;
       }
