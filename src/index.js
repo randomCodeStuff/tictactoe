@@ -167,7 +167,8 @@ function bestAIMove(squares) {
   for (let i = 0; i < 9; i++) {
     if (squares[i] === null) {
       squares[i] = 'O';
-      let score = minimax(squares, false, 0);
+      //let score = minimax(squares, false, 0);
+      let score = minimaxAlphaBeta(squares, false, 9, -Infinity, Infinity);
       console.log('score in bestAImove: ' + score + 'for move ' + i);
       squares[i] = null;
 
@@ -179,4 +180,48 @@ function bestAIMove(squares) {
   }
   console.log('the best move is:' + move);
   return move;
+}
+
+function minimaxAlphaBeta(board, isMaximizing, depth, alpha, beta) {
+  if (depth === 0) {
+    console.log('returning null because max debth reached');
+    return null;
+  }
+  let result = calculateWinner(board);
+  let numberOfNulls = board.filter((word) => word === null).length;
+  if (result || numberOfNulls === 0) {
+    return scores[result];
+  }
+  if (isMaximizing) {
+    let bestScore = -Infinity;
+    for (let i = 0; i < 9; i++) {
+      if (board[i] == null) {
+        board[i] = 'O';
+        let score = minimaxAlphaBeta(board, false, depth - 1, alpha, beta);
+        board[i] = null;
+        bestScore = Math.max(score, bestScore);
+        alpha = Math.max(alpha, bestScore);
+        if (beta <= alpha) {
+          break;
+        }
+      }
+    }
+    return bestScore;
+  } //if (!isMaximizing)
+  else {
+    let bestScore = Infinity;
+    for (let i = 0; i < 9; i++) {
+      if (board[i] == null) {
+        board[i] = 'X';
+        let score = minimaxAlphaBeta(board, true, depth - 1, alpha, beta);
+        board[i] = null;
+        bestScore = Math.min(score, bestScore);
+        beta = Math.min(beta, score);
+        if (beta <= alpha) {
+          break;
+        }
+      }
+    }
+    return bestScore;
+  }
 }
