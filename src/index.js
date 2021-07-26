@@ -25,22 +25,6 @@ class Board extends React.Component {
     };
   }
 
-  AIplayerRandom(board) {
-    if (!board.includes(null)) {
-      return;
-    }
-    let move = Math.floor(Math.random() * 9);
-    if (board[move] === null) {
-      // this.setState({
-      //   xIsNext: !this.state.xIsNext,
-      // });
-      //this.state.xIsNext = !this.state.xIsNext;
-      return move;
-    } else {
-      return this.AIplayerRandom(board);
-    }
-  }
-
   handleClick(i) {
     const squares = this.state.squares.slice();
     //disable click for won game or already clicked.
@@ -48,24 +32,13 @@ class Board extends React.Component {
       return;
     }
     squares[i] = this.state.xIsNext ? 'X' : 'O';
-    this.state.xIsNext = !this.state.xIsNext;
+    this.state.xIsNext = !this.state.xIsNext; //I know this is bad practice
     this.setState({
-      //xIsNext: !this.state.xIsNext,
       squares: squares,
     });
-    //this.state.xIsNext = !this.state.xIsNext;
-    //}
-    //let move = this.AIplayerRandom(squares);
-    //squares[move] = !this.state.xIsNext ? 'X' : 'O';
-    //let score = this.minimax(squares, 0, false, 0, 0);
-    //console.log(score);
-    let move = bestAIMove(squares);
+    let move = bestAIMove(squares); //in order checked
     squares[move] = this.state.xIsNext ? 'X' : 'O';
-    this.state.xIsNext = !this.state.xIsNext;
-    // this.setState({
-    //   xIsNext: !this.state.xIsNext,
-    //   squares: squares,
-    // });
+    this.state.xIsNext = !this.state.xIsNext; //I know this is bad practice
   }
 
   renderSquare(i) {
@@ -155,12 +128,11 @@ function calculateWinner(squares) {
 function minimax(board, isMaximizing, depth) {
   if (depth === 9) {
     console.log('returning null because max debth reached');
-    return null; //a failsafe to keep this from recursing forever
+    return null;
   }
   let result = calculateWinner(board);
   let numberOfNulls = board.filter((word) => word === null).length;
   if (result || numberOfNulls === 0) {
-    //console.log('in exiting if score = :' + scores[result]);
     return scores[result];
   }
   if (isMaximizing) {
@@ -171,27 +143,18 @@ function minimax(board, isMaximizing, depth) {
         let score = minimax(board, false, depth + 1);
         board[i] = null;
         bestScore = Math.max(score, bestScore);
-        // if (score > bestScore) {
-        //   bestScore = score;
-        // }
       }
     }
     return bestScore;
   } //if (!isMaximizing)
   else {
-    //console.log('in minimising');
     let bestScore = Infinity;
     for (let i = 0; i < 9; i++) {
       if (board[i] == null) {
-        //console.log(i);
         board[i] = 'X';
-        //console.log(board);
         let score = minimax(board, true, depth + 1);
         board[i] = null;
-        //bestScore = Math.min(score, bestScore);
-        if (score < bestScore) {
-          bestScore = score;
-        }
+        bestScore = Math.min(score, bestScore);
       }
     }
     return bestScore;
@@ -199,17 +162,15 @@ function minimax(board, isMaximizing, depth) {
 }
 
 function bestAIMove(squares) {
-  //console.log(squares);
   let bestScore = -Infinity;
-
   let move;
   for (let i = 0; i < 9; i++) {
-    //console.log(squares[i]);
     if (squares[i] === null) {
       squares[i] = 'O';
       let score = minimax(squares, false, 0);
       console.log('score in bestAImove: ' + score + 'for move ' + i);
       squares[i] = null;
+
       if (score > bestScore) {
         bestScore = score;
         move = i;
