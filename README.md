@@ -70,3 +70,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
 Link to React tutorial https://reactjs.org/tutorial/tutorial.html#lifting-state-up
+
+Link to alpha beta pruning example https://www.javatpoint.com/ai-alpha-beta-pruning
+
+Really great minimax tutorial https://thecodingtrain.com/CodingChallenges/154-tic-tac-toe-minimax.html

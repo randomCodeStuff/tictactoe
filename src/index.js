@@ -6,6 +6,19 @@ let scores = {
   T: 0,
   O: 10,
   X: -10,
+  null: null,
+};
+
+let intermediateScores = {
+  0: 10,
+  1: -10,
+  2: 10,
+  3: -10,
+  4: 10,
+  5: -10,
+  6: 10,
+  7: -10,
+  8: 10,
 };
 
 function Square(props) {
@@ -168,8 +181,11 @@ function bestAIMove(squares) {
     if (squares[i] === null) {
       squares[i] = 'O';
       //let score = minimax(squares, false, 0);
-      let score = minimaxAlphaBeta(squares, false, 9, -Infinity, Infinity);
-      console.log('score in bestAImove: ' + score + 'for move ' + i);
+      let score = minimaxAlphaBeta(squares, false, 8, -Infinity, Infinity);
+      if (score === null) {
+        score = intermediateScores[i]; //
+      }
+      //console.log('score in bestAImove: ' + score + 'for move ' + i);
       squares[i] = null;
 
       if (score > bestScore) {
@@ -183,11 +199,12 @@ function bestAIMove(squares) {
 }
 
 function minimaxAlphaBeta(board, isMaximizing, depth, alpha, beta) {
+  let result = calculateWinner(board);
   if (depth === 0) {
-    console.log('returning null because max debth reached');
+    console.log('returning because max debth reached');
+    //return scores[result];
     return null;
   }
-  let result = calculateWinner(board);
   let numberOfNulls = board.filter((word) => word === null).length;
   if (result || numberOfNulls === 0) {
     return scores[result];
