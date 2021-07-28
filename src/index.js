@@ -2,25 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-let scores = {
-  T: 0,
-  O: 10,
-  X: -10,
-  null: null,
-};
-
-let intermediateScores = {
-  0: 10,
-  1: -10,
-  2: 10,
-  3: -10,
-  4: 10,
-  5: -10,
-  6: 10,
-  7: -10,
-  8: 10,
-};
-
 function Square(props) {
   return (
     <button className="square" onClick={() => props.onClick()}>
@@ -115,6 +96,26 @@ class Game extends React.Component {
 
 ReactDOM.render(<Game />, document.getElementById('root'));
 
+let scores = {
+  T: 0,
+  O: 10,
+  X: -10,
+  null: null,
+};
+
+//for alpha beta, best scores are edges and middle
+let intermediateScores = {
+  0: 10,
+  1: -10,
+  2: 10,
+  3: -10,
+  4: 10,
+  5: -10,
+  6: 10,
+  7: -10,
+  8: 10,
+};
+
 function calculateWinner(squares) {
   const lines = [
     [0, 1, 2],
@@ -202,8 +203,7 @@ function minimaxAlphaBeta(board, isMaximizing, depth, alpha, beta) {
   let result = calculateWinner(board);
   if (depth === 0) {
     console.log('returning because max debth reached');
-    //return scores[result];
-    return null;
+    return null; //in bestAImove null will use intermediateScores
   }
   let numberOfNulls = board.filter((word) => word === null).length;
   if (result || numberOfNulls === 0) {
