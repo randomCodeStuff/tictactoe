@@ -10,7 +10,7 @@ let MIN = -1000;
 // Returns optimal value for
 // current player (Initially called
 // for root and maximizer)
-function minimax(depth, nodeIndex, maximizingPlayer, values, alpha, beta) {
+function minimax1(depth, nodeIndex, maximizingPlayer, values, alpha, beta) {
   // Terminating condition. i.e
   // leaf node is reached
   if (depth == 3) return values[nodeIndex];
@@ -67,3 +67,39 @@ let values = [3, 5, 6, 9, 1, 2, 0, -1];
 //let values = [3, 12, 8, 2, 4, 6, 14, 5, 2];
 
 console.log('The optimal value is : ' + minimax(0, 0, true, values, MIN, MAX));
+/////////This would need other info to run saved from tic tac toe
+function minimax(board, isMaximizing, depth) {
+  if (depth === 9) {
+    console.log('returning null because max debth reached');
+    return null;
+  }
+  let result = calculateWinner(board);
+  let numberOfNulls = board.filter((word) => word === null).length;
+  if (result || numberOfNulls === 0) {
+    return scores[result];
+  }
+  if (isMaximizing) {
+    let bestScore = -Infinity;
+    for (let i = 0; i < 9; i++) {
+      if (board[i] == null) {
+        board[i] = 'O';
+        let score = minimax(board, false, depth + 1);
+        board[i] = null;
+        bestScore = Math.max(score, bestScore);
+      }
+    }
+    return bestScore;
+  } //if (!isMaximizing)
+  else {
+    let bestScore = Infinity;
+    for (let i = 0; i < 9; i++) {
+      if (board[i] == null) {
+        board[i] = 'X';
+        let score = minimax(board, true, depth + 1);
+        board[i] = null;
+        bestScore = Math.min(score, bestScore);
+      }
+    }
+    return bestScore;
+  }
+}

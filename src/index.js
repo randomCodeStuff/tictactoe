@@ -130,52 +130,23 @@ function calculateWinner(squares) {
     [0, 4, 8],
     [2, 4, 6],
   ];
+  let xinarray = squares.filter((x) => x === 'X').length;
+  let oinarray = squares.filter((o) => o === 'O').length;
+
+  if (xinarray === 5 || oinarray === 5) {
+    return 'T';
+  }
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
       return squares[a];
     }
-    if (!squares.includes(null)) {
-      return 'T';
-    }
+
+    // if (!squares.includes(null)) {
+    //   return 'T';
+    // }
   }
   return null;
-}
-
-function minimax(board, isMaximizing, depth) {
-  if (depth === 9) {
-    console.log('returning null because max debth reached');
-    return null;
-  }
-  let result = calculateWinner(board);
-  let numberOfNulls = board.filter((word) => word === null).length;
-  if (result || numberOfNulls === 0) {
-    return scores[result];
-  }
-  if (isMaximizing) {
-    let bestScore = -Infinity;
-    for (let i = 0; i < 9; i++) {
-      if (board[i] == null) {
-        board[i] = 'O';
-        let score = minimax(board, false, depth + 1);
-        board[i] = null;
-        bestScore = Math.max(score, bestScore);
-      }
-    }
-    return bestScore;
-  } //if (!isMaximizing)
-  else {
-    let bestScore = Infinity;
-    for (let i = 0; i < 9; i++) {
-      if (board[i] == null) {
-        board[i] = 'X';
-        let score = minimax(board, true, depth + 1);
-        board[i] = null;
-        bestScore = Math.min(score, bestScore);
-      }
-    }
-    return bestScore;
-  }
 }
 
 function bestAIMove(squares) {
@@ -184,21 +155,17 @@ function bestAIMove(squares) {
   for (let i = 0; i < 9; i++) {
     if (squares[i] === null) {
       squares[i] = 'O';
-      //let score = minimax(squares, false, 0);
       let score = minimaxAlphaBeta(squares, false, 8, -Infinity, Infinity);
       if (score === null) {
         score = intermediateScores[i]; //
       }
-      //console.log('score in bestAImove: ' + score + 'for move ' + i);
       squares[i] = null;
-
       if (score > bestScore) {
         bestScore = score;
         move = i;
       }
     }
   }
-  console.log('the best move is:' + move);
   return move;
 }
 
