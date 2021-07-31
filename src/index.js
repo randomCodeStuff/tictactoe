@@ -26,16 +26,12 @@ class Board extends React.Component {
       return;
     }
     squares[i] = this.state.xIsNext ? 'X' : 'O';
-
-    //this.state.xIsNext = !this.state.xIsNext; //I know this is bad practice
     await this.setState({
       xIsNext: false,
       squares: squares,
     });
     let move = bestAIMove(squares); //in order checked;
-    //squares[move] = 'O';
     squares[move] = this.state.xIsNext ? 'X' : 'O';
-    //this.state.xIsNext = !this.state.xIsNext; //I know this is bad practice
     await this.setState({
       xIsNext: true,
       squares: squares,
@@ -50,22 +46,6 @@ class Board extends React.Component {
       />
     );
   }
-
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   if (this.props.squares !== nextProps.squares) {
-  //     return true;
-  //   }
-  //   if (this.props.xIsNext !== nextProps.xIsNext) {
-  //     return true;
-  //   }
-  //   if (this.state.squares !== nextState.squares) {
-  //     return true;
-  //   }
-  //   if (this.state.xIsNext !== nextState.xIsNext) {
-  //     return true;
-  //   }
-  //   return false;
-  // }
 
   render() {
     const winner = calculateWinner(this.state.squares);
