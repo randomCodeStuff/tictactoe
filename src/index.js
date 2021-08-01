@@ -164,12 +164,12 @@ function calculateWinner(squares) {
     [0, 4, 8],
     [2, 4, 6],
   ];
-  let xinarray = squares.filter((x) => x === 'X').length;
-  let oinarray = squares.filter((o) => o === 'O').length;
+  // let xinarray = squares.filter((x) => x === 'X').length;
+  // let oinarray = squares.filter((o) => o === 'O').length;
 
-  if (xinarray === 5 || oinarray === 5) {
-    return 'T';
-  }
+  // if (xinarray === 5 || oinarray === 5) {
+  //   return 'T';
+  // }
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
