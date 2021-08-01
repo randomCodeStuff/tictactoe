@@ -4,7 +4,7 @@ import './index.css';
 
 function Square(props) {
   return (
-    <button className="square" onClick={() => props.onClick()}>
+    <button className="square" onClick={props.onClick}>
       {props.value}
     </button>
   );
@@ -58,7 +58,7 @@ class Game extends React.Component {
   async handleClick(i) {
     const history = this.state.history;
     const current = history[history.length - 1];
-    const squares = this.state.squares.slice();
+    const squares = current.squares.slice();
     //disable click for won game or already clicked.
     if (calculateWinner(squares) || squares[i]) {
       return;
@@ -75,23 +75,13 @@ class Game extends React.Component {
     let move = bestAIMove(squares); //in order checked;
     squares[move] = this.state.xIsNext ? 'X' : 'O';
     await this.setState({
-      history:
-        history.concat[
-          {
-            squares: squares,
-          }
-        ],
+      history: history.concat([
+        {
+          squares: squares,
+        },
+      ]),
       xIsNext: true,
     });
-  }
-
-  renderSquare(i) {
-    return (
-      <Square
-        value={this.props.squares[i]}
-        onClick={() => this.props.onClick(i)}
-      />
-    );
   }
 
   render() {
