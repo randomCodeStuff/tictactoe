@@ -6,6 +6,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 const xIsNext = createAction('xIsNext');
 const squares = createAction('squares');
 const history = createAction('history');
+const stepNumber = createAction('stepNumber');
 
 // export const aiMove = aiMoveThunk(async (board) => {
 //   const move = await bestAIMove(board);
@@ -21,6 +22,8 @@ const initialState = {
   stepNumber: 0,
   xIsNext: true,
 };
+
+export { initialState };
 //thunk
 const aiMove = createAsyncThunk(initialState, {
   //stuff
@@ -36,6 +39,10 @@ const reducer = createReducer(initialState, {
     return state;
   },
   [squares]: (state, action) => {
+    console.log(action);
+    return state;
+  },
+  [stepNumber]: (state, action) => {
     console.log(action);
     return state;
   },

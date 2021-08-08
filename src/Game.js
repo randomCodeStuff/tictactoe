@@ -1,20 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import calculateWinner from './calculateWinner';
 import bestAIMove from './bestAIMove';
 import Board from './Board';
+import store, { initialState } from './app/store';
 
 export default class Game extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      history: [
-        {
-          squares: Array(9).fill(null),
-        },
-      ],
-      stepNumber: 0,
-      xIsNext: true,
-    };
+    this.state = initialState;
+    //I know this probably is not right yet but just getting it to work
   }
   async handleClick(i) {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
