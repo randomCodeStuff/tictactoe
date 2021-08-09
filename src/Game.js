@@ -8,8 +8,15 @@ import store, { initialState } from './app/store';
 export default class Game extends React.Component {
   constructor(props) {
     super(props);
-    this.state = initialState;
-    //I know this probably is not right yet but just getting it to work
+    this.state = {
+      history: [
+        {
+          squares: Array(9).fill(null),
+        },
+      ],
+      stepNumber: 0,
+      xIsNext: true,
+    };
   }
   async handleClick(i) {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
@@ -50,6 +57,7 @@ export default class Game extends React.Component {
   }
 
   render() {
+    console.dir('store' + JSON.stringify(initialState));
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);

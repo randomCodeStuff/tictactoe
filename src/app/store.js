@@ -21,9 +21,19 @@ const initialState = {
   ],
   stepNumber: 0,
   xIsNext: true,
+  status: '',
 };
 
 export { initialState };
+
+export const handleClickAsync = createAsyncThunk(
+  'counter/fetchCount',
+  async (i) => {
+    const response = await onClick(i);
+    // The value we return becomes the `fulfilled` action payload
+    return response.data;
+  }
+);
 //thunk
 const aiMove = createAsyncThunk(initialState, {
   //stuff
@@ -45,6 +55,16 @@ const reducer = createReducer(initialState, {
   [stepNumber]: (state, action) => {
     console.log(action);
     return state;
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(handleClickAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(handleClickAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        state.value += action.payload;
+      });
   },
 });
 
