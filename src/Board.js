@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Square from './Square';
+import store, { handleClickAsync } from './app/store';
+import { useSelector, useDispatch } from 'react-redux';
 
 export default class Board extends React.Component {
   renderSquare(i) {

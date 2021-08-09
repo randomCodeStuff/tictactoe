@@ -29,7 +29,7 @@ export { initialState };
 export const handleClickAsync = createAsyncThunk(
   'counter/fetchCount',
   async (i) => {
-    const response = await onClick(i);
+    const response = await i;
     // The value we return becomes the `fulfilled` action payload
     return response.data;
   }
